@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-import Table from './components/Table';
+import TableExampleComplex from './components/Table';
+import VacationFormContainer from './components/VacationFormContainer';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Календарь отпусков</h2>
+      <MuiThemeProvider>
+        <div className="App">
+          <div className="main">
+            <VacationFormContainer />
+            <TableExampleComplex />
+          </div>
         </div>
-        <div className="main">
-          <Table />
-        </div>
-      </div>
+      </ MuiThemeProvider>
     );
   }
 }

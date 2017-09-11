@@ -20,15 +20,17 @@
 }
 
 .main {
+  width: 1200px;
   margin: 50px auto;
 }
 
-table {
-  border-collapse: collapse;
-  margin: 0 auto;
+.add-vacation {
+  /* width: 500px; */
+  /* margin: 0 auto; */
+  text-align: left;
 }
 
-td, th {
-  border: 1px solid black;
-  padding: 10px;
+.validation {
+  width: 400px;
+  color: #F44336;
 }
