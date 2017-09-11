@@ -22,11 +22,10 @@
 .main {
   width: 1200px;
   margin: 50px auto;
+  display: flex;
 }
 
 .add-vacation {
-  /* width: 500px; */
-  /* margin: 0 auto; */
   text-align: left;
 }
 

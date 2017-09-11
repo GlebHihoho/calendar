@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import TableExampleComplex from './components/Table';
+import TableVacationsContainer from './components/TableVacationsContainer';
 import VacationFormContainer from './components/VacationFormContainer';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -13,7 +13,7 @@ class App extends Component {
         <div className="App">
           <div className="main">
             <VacationFormContainer />
-            <TableExampleComplex />
+            <TableVacationsContainer />
           </div>
         </div>
       </ MuiThemeProvider>

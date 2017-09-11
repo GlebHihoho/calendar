@@ -7,9 +7,8 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import employeesList from '../content/employeesList';
 
-export default class TableExampleComplex extends Component {
+export default class TableVacations extends Component {
   state = {
     fixedHeader: true,
     stripedRows: false,
@@ -19,10 +18,12 @@ export default class TableExampleComplex extends Component {
     enableSelectAll: false,
     deselectOnClickaway: true,
     showCheckboxes: false,
-    height: '500px',employeesList
+    height: '500px'
   };
 
   render() {
+    const { vacations } = this.props.state.employees;
+
     return (
       <div>
         <Table
@@ -34,7 +35,7 @@ export default class TableExampleComplex extends Component {
           <TableHeader
             displaySelectAll={this.state.showCheckboxes}
             adjustForCheckbox={this.state.showCheckboxes}
-            enableSelectAll={this.state.enableSelectAll}
+            enableSelectAll={this.state.enableSeleoptionsctAll}
           >
             <TableRow>
               <TableHeaderColumn colSpan="4" tooltip="Super Header" style={{textAlign: 'center'}}>
@@ -54,14 +55,16 @@ export default class TableExampleComplex extends Component {
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
           >
-            {employeesList.map( (row, index) => (
-              <TableRow key={index}>
-                <TableRowColumn>{row.name}</TableRowColumn>
-                <TableRowColumn>{row.position}</TableRowColumn>
-                <TableRowColumn>01.05.2017</TableRowColumn>
-                <TableRowColumn>05.05.2017</TableRowColumn>
-              </TableRow>
-              ))}
+            {
+              vacations ? vacations.map( (row, index) => (
+                <TableRow key={index}>
+                  <TableRowColumn>{row.name}</TableRowColumn>
+                  <TableRowColumn>{row.position}</TableRowColumn>
+                  <TableRowColumn>{row.vacationStartDate.toLocaleString('ru')}</TableRowColumn>
+                  <TableRowColumn>{row.vacationEndDate.toLocaleString('ru')}</TableRowColumn>
+                </TableRow>
+                )) : ''
+              }
           </TableBody>
         </Table>
       </div>
