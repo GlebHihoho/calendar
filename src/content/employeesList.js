@@ -1,51 +1,63 @@
 const employeesList = [
   {
     name: 'Мотуз Глеб Игоревич',
-    position: 'инженер'
+    position: 'инженер',
+    vacations: []
   },
   {
     name: 'Иванов Иван Иванович',
-    position: 'технолог'
+    position: 'технолог',
+    vacations: []
   },
   {
     name: 'Петров Фёдор Фёдорович',
-    position: 'дизайнер'
+    position: 'дизайнер',
+    vacations: []
   },
   {
     name: 'Сидоров Игорь Васильевич',
-    position: 'верстальщик'
+    position: 'верстальщик',
+    vacations: []
   },
   {
     name: 'Зубчёнок Антон Александрович',
-    position: 'программист'
+    position: 'программист',
+    vacations: []
   },
   {
     name: 'Вашкевич Николай Николаевич',
-    position: 'экономист'
+    position: 'экономист',
+    vacations: []
   },
   {
     name: 'Романеня Виктор Ефремович',
-    position: 'технолог'
+    position: 'технолог',
+    vacations: []
   },
   {
     name: 'Максимов Дмитрий Викторович',
-    position: 'верстальщик'
+    position: 'верстальщик',
+    vacations: []
   },
   {
     name: 'Домарацкий Алексей Фёдорович',
-    position: 'экономист'
+    position: 'экономист',
+    vacations: []
   },
   {
     name: 'Мотуз Игорь Валентинович',
-    position: 'инженер'
+    position: 'инженер',
+    vacations: []
   },
   {
     name: 'Мотуз Евгения Викторовна',
-    position: 'экономист'
+    position: 'экономист',
+    vacations: []
   },
   {
     name: 'Романеня Илья Юрьевич',
-    position: 'программист'
+    position: 'программист',
+    vacations: []
   },
 ];
 
