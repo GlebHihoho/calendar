@@ -3,6 +3,7 @@ import './App.css';
 
 import TableVacationsContainer from './components/TableVacationsContainer';
 import VacationFormContainer from './components/VacationFormContainer';
+import EditVacationFormContainer from './components/EditVacationFormContainer';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 
@@ -12,7 +13,10 @@ class App extends Component {
       <MuiThemeProvider>
         <div className="App">
           <div className="main">
-            <VacationFormContainer />
+            <div>
+              <VacationFormContainer />
+              <EditVacationFormContainer />
+            </div>
             <TableVacationsContainer />
           </div>
         </div>

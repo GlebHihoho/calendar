@@ -1,12 +1,11 @@
-import React, {Component} from 'react';
-import SelectField from 'material-ui/SelectField';
-import FlatButton from 'material-ui/FlatButton';
-import MenuItem from 'material-ui/MenuItem';
+import React, { Component } from 'react';
 import DatePicker from 'material-ui/DatePicker';
+import FlatButton from 'material-ui/FlatButton';
 import { find,
-         last,
-         filter,
-         reject } from 'lodash';
+  remove,
+  last,
+  filter,
+  reject } from 'lodash';
 
 const MIN_DAY_VACATION = 2;
 const MAX_DAY_VACATION = 15;
@@ -22,7 +21,7 @@ const buttonStyle = {
   width: '150px'
 };
 
-class VacationForm extends Component {
+export default class EditVacationForm extends Component {
   constructor(props) {
     super(props);
 
@@ -38,12 +37,6 @@ class VacationForm extends Component {
   handleChangeStartDate = (event, date) => this.setState({ vacationStartDate: date });
   handleChangeEndDate = (event, date) => this.setState({ vacationEndDate: date });
   getPosition = name => find(this.props.state.employees.employeesList, { 'name': name }).position;
-  handleChangeName = (event, index, name) => this.setState(
-    {
-      name,
-      position: this.getPosition(name)
-    }
-  );
   resetForm = () => (
     this.setState({
       name: 'Мотуз Глеб Игоревич',
@@ -52,14 +45,24 @@ class VacationForm extends Component {
       vacationEndDate: null,
       validationMessage: ''
     })
-  )
+  );
 
   submit = () => {
     const startDate = this.state.vacationStartDate;
     const endDate = this.state.vacationEndDate;
     const name = this.state.name;
     const position = this.state.position;
-    const employeesList = this.props.state.employees.employeesList;
+    const oldStartDate = this.props.state.employees.middlewareVacation.vacationStartDate;
+    const copyList = Object.assign(this.props.state.employees.employeesList);
+    const middle = copyList.map(el => {
+      if (el.name === name) {
+        remove(el.vacations, v => v.vacationStartDate == oldStartDate);
+      }
+      return el;
+    })
+    // const employeesList = this.props.state.employees.employeesList;
+    // const vacationsArray = find(employeesList, { 'name': name }).vacations;
+    const employeesList = middle;
     const vacationsArray = find(employeesList, { 'name': name }).vacations;
 
     function minСontinuousDayVacation() {
@@ -118,6 +121,10 @@ class VacationForm extends Component {
       return false;
     }
 
+    function checkDateNow() {
+      return startDate < Date.now() ? true : false;
+    }
+
     function checkDate(dateArr) {
       const check = dateArr.map(vacation => {
         if (vacation.vacationStartDate > endDate) {
@@ -164,6 +171,8 @@ class VacationForm extends Component {
       this.setState({validationMessage: 'Ещё не закончен старый отпуск'});
     } else if (minPeriodBetweenVacations()) {
       this.setState({validationMessage: 'Минимальный период между периодами отпуска равен размеру первого отпуска'});
+    } else if (checkDateNow()) {
+      this.setState({validationMessage: 'Выберите другое время'});
     } else if (maxDay()) {
       this.setState({validationMessage: 'Максимальное количество дней отпуска в году - 24 календарных дня'});
     } else if (checkPositions()) {
@@ -171,59 +180,45 @@ class VacationForm extends Component {
     } else {
       this.setState(
         {
-          position: this.getPosition(this.state.name),
           validationMessage: 'Список обновлён'
         }
       )
-      this.props.addEmployee(this.state);
+      this.props.closeEditVacation(this.props.state.employees.middlewareVacation.name, startDate, endDate, oldStartDate);
       this.resetForm();
     };
   }
 
   render() {
-    const { employeesList, editVacation } = this.props.state.employees;
+    const { editVacation,
+            middlewareVacation } = this.props.state.employees;
+    const name = middlewareVacation.name;
 
     return (
-      <div>
+      <div className='add-vacation'>
         {
-          !editVacation ?
-            <div className='add-vacation'>
-              <SelectField
-                floatingLabelText="Выберите имя"
-                value={this.state.name}
-                onChange={this.handleChangeName}
-                disabled={editVacation}
-              >
-                {
-                  employeesList.map(el => (
-                    <MenuItem key={el.name} value={el.name} primaryText={el.name} />
-                  ))
-                }
-              </SelectField>
-              <div>Должность: {this.getPosition(this.state.name)}</div>
-              <DatePicker
+          !editVacation ? '' :
+          <div>
+            <div>ФИО: {name}</div>
+            <div>Должность: {this.getPosition(name)}</div>
+            <DatePicker
                 hintText="Дата начала отпуска"
                 value={this.state.vacationStartDate}
                 onChange={this.handleChangeStartDate}
-              />
-              <DatePicker
-                hintText="Дата окончания отпуска"
-                value={this.state.vacationEndDate}
-                onChange={this.handleChangeEndDate}
-              />
-              <div className="validation">{this.state.validationMessage}</div>
-              <FlatButton
-                label={"Добавить"}
+            />
+            <DatePicker
+              hintText="Дата окончания отпуска"
+              value={this.state.vacationEndDate}
+              onChange={this.handleChangeEndDate}
+            />
+            <div className="validation">{this.state.validationMessage}</div>
+            <FlatButton
+                label={"Редактировать"}
                 style={buttonStyle}
-                disabled={editVacation}
                 onClick={this.submit}
-              />
-            </div> : ''
+            />
+          </div>
         }
       </div>
-
-    );
+    )
   }
 }
-
-export default VacationForm;

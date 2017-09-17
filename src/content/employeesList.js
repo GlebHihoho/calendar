@@ -59,6 +59,16 @@ const employeesList = [
     position: 'программист',
     vacations: []
   },
+  {
+    name: 'Романеня Валентина Владимировна',
+    position: 'экономист',
+    vacations: []
+  },
+  {
+    name: 'Романеня Максим Юрьевич',
+    position: 'дизайнер',
+    vacations: []
+  }
 ];
 
 export default employeesList;
