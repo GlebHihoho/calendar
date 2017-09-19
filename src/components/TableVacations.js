@@ -92,6 +92,14 @@ export default class TableVacations extends Component {
     this.props.sortByDate(this.state.sortByDate)
   }
 
+  viewDate = date => {
+    if (typeof date === 'object') {
+      return date.toLocaleDateString('ru-Ru');
+    } else if (typeof date === 'string') {
+      return date;
+    }
+  }
+
   render() {
     const { vacations, editVacation, middlewareVacation } = this.props.state.employees;
 
@@ -149,8 +157,8 @@ export default class TableVacations extends Component {
               >
                 <TableRowColumn>{row.name}</TableRowColumn>
                 <TableRowColumn>{row.position}</TableRowColumn>
-                <TableRowColumn>{row.vacationStartDate.toLocaleString('ru')}</TableRowColumn>
-                <TableRowColumn>{row.vacationEndDate.toLocaleString('ru')}</TableRowColumn>
+                <TableRowColumn>{this.viewDate(row.vacationStartDate)}</TableRowColumn>
+                <TableRowColumn>{this.viewDate(row.vacationEndDate)}</TableRowColumn>
                 <TableRowColumn>
                   <IconButton
                     name={row.name}

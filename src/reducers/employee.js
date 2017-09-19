@@ -66,13 +66,13 @@ export default function(state = initialState, action) {
     })
   };
 
-  const sortByName = () => {
-    if (state.sortByName) {
+  const sortBy = (value, type) => {
+    if (state[type]) {
       return state.vacations.sort((a, b) => {
-        if (a.name > b.name) {
+        if (a[value] > b[value]) {
           return 1;
         }
-        if (a.name < b.name) {
+        if (a[value] < b[value]) {
           return -1;
         }
         return 0;
@@ -80,34 +80,10 @@ export default function(state = initialState, action) {
     }
 
     return state.vacations.sort((a, b) => {
-      if (a.name < b.name) {
+      if (a[value] < b[value]) {
         return 1;
       }
-      if (a.name > b.name) {
-        return -1;
-      }
-      return 0;
-    })
-  };
-
-  const sortByDate = () => {
-    if (state.sortByDate) {
-      return state.vacations.sort((a, b) => {
-        if (a.vacationStartDate > b.vacationStartDate) {
-          return 1;
-        }
-        if (a.vacationStartDate < b.vacationStartDate) {
-          return -1;
-        }
-        return 0;
-      })
-    }
-
-    return state.vacations.sort((a, b) => {
-      if (a.vacationStartDate < b.vacationStartDate) {
-        return 1;
-      }
-      if (a.vacationStartDate > b.vacationStartDate) {
+      if (a[value] > b[value]) {
         return -1;
       }
       return 0;
@@ -154,13 +130,13 @@ export default function(state = initialState, action) {
     case actions.SORT_BY_NAME:
       return {
         ...state,
-        vacations: sortByName(),
+        vacations: sortBy('name', 'sortByName'),
         sortByName: action.sortByName
       };
     case actions.SORT_BY_DATE:
       return {
         ...state,
-        vacations: sortByDate(),
+        vacations: sortBy('vacationStartDate', 'sortByDate'),
         sortByDate: action.sortByDate
       };
     default: return state;
