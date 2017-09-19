@@ -1,4 +1,6 @@
-const employeesList = [
+import shortid from 'js-shortid';
+
+const list = [
   {
     name: 'Мотуз Глеб Игоревич',
     position: 'инженер',
@@ -70,5 +72,11 @@ const employeesList = [
     vacations: []
   }
 ];
+
+const employeesList = list.map(el => {
+  el.id = shortid.gen();
+
+  return el;
+});
 
 export default employeesList;

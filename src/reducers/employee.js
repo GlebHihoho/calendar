@@ -1,4 +1,4 @@
-import * as actions from '../constants/addEmployees';
+import * as actions from '../constants/constants';
 import employeesList from '../content/employeesList';
 import { remove } from 'lodash';
 
@@ -6,14 +6,17 @@ const initialState = {
     employeesList,
     vacations: [],
     editVacation: false,
-    middlewareVacation: {}
+    middlewareVacation: {},
+    sortByName: false,
+    sortByDate: false
 };
 
 export default function(state = initialState, action) {
   const editEmployeesList = () => (
     state.employeesList.map(el => {
-      if (el.name === action.employee.name) {
+      if (el.id === action.employee.idEmployee) {
         el.vacations.push({
+          idVacation: action.employee.idVacation,
           vacationStartDate: action.employee.vacationStartDate,
           vacationEndDate: action.employee.vacationEndDate
         })
@@ -24,14 +27,14 @@ export default function(state = initialState, action) {
   );
 
   const deleteVacations = () => {
-    remove(state.vacations, el => el.name === action.name && el.vacationStartDate == action.startDate);
+    remove(state.vacations, el => el.idVacation === action.idVacation);
 
     return state.vacations;
   };
 
   const deleteVacationInEmployeesList = () => {
     return state.employeesList.map(e => {
-      remove(e.vacations, v => v.vacationStartDate == action.startDate);
+      remove(e.vacations, v => v.idVacation === action.idVacation);
 
       return e;
     })
@@ -49,9 +52,9 @@ export default function(state = initialState, action) {
 
   const editEmployeesListVacation = () => {
     return state.employeesList.map(el => {
-      if (el.name === action.name) {
+      if (el.id === action.idEmployee) {
         el.vacations.map(v => {
-          if (v.vacationStartDate == action.oldStartDate) {
+          if (v.id === action.idVacation) {
             v.vacationStartDate = action.startDate;
             v.vacationEndDate = action.endDate;
           }
@@ -60,6 +63,54 @@ export default function(state = initialState, action) {
         return el;
       }
       return el;
+    })
+  };
+
+  const sortByName = () => {
+    if (state.sortByName) {
+      return state.vacations.sort((a, b) => {
+        if (a.name > b.name) {
+          return 1;
+        }
+        if (a.name < b.name) {
+          return -1;
+        }
+        return 0;
+      })
+    }
+
+    return state.vacations.sort((a, b) => {
+      if (a.name < b.name) {
+        return 1;
+      }
+      if (a.name > b.name) {
+        return -1;
+      }
+      return 0;
+    })
+  };
+
+  const sortByDate = () => {
+    if (state.sortByDate) {
+      return state.vacations.sort((a, b) => {
+        if (a.vacationStartDate > b.vacationStartDate) {
+          return 1;
+        }
+        if (a.vacationStartDate < b.vacationStartDate) {
+          return -1;
+        }
+        return 0;
+      })
+    }
+
+    return state.vacations.sort((a, b) => {
+      if (a.vacationStartDate < b.vacationStartDate) {
+        return 1;
+      }
+      if (a.vacationStartDate > b.vacationStartDate) {
+        return -1;
+      }
+      return 0;
     })
   }
 
@@ -74,7 +125,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         employeesList: deleteVacationInEmployeesList(),
-        vacations: deleteVacations()
+        vacations: deleteVacations(),
+        middlewareVacation: {}
       };
     case actions.OPEN_EDIT_VACATION:
       return {
@@ -83,6 +135,8 @@ export default function(state = initialState, action) {
         middlewareVacation: {
           name: action.name,
           vacationStartDate: action.startDate,
+          idEmployee: action.idEmployee,
+          idVacation: action.idVacation
         }
       };
     case actions.CLOSE_EDIT_VACATION:
@@ -96,6 +150,18 @@ export default function(state = initialState, action) {
           endDate: action.endDate,
           oldStartDate: action.oldStartDate,
         }
+      };
+    case actions.SORT_BY_NAME:
+      return {
+        ...state,
+        vacations: sortByName(),
+        sortByName: action.sortByName
+      };
+    case actions.SORT_BY_DATE:
+      return {
+        ...state,
+        vacations: sortByDate(),
+        sortByDate: action.sortByDate
       };
     default: return state;
   }

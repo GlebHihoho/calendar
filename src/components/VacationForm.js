@@ -3,6 +3,7 @@ import SelectField from 'material-ui/SelectField';
 import FlatButton from 'material-ui/FlatButton';
 import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
+import shortid from 'js-shortid';
 import { find,
          last,
          filter,
@@ -31,17 +32,22 @@ class VacationForm extends Component {
       position: 'инженер',
       vacationStartDate: null,
       vacationEndDate: null,
-      validationMessage: ''
+      validationMessage: '',
+      idEmployee: find(this.props.state.employees.employeesList, { 'name': 'Мотуз Глеб Игоревич' }).id,
+      idVacation: shortid.gen()
     };
   }
 
   handleChangeStartDate = (event, date) => this.setState({ vacationStartDate: date });
   handleChangeEndDate = (event, date) => this.setState({ vacationEndDate: date });
   getPosition = name => find(this.props.state.employees.employeesList, { 'name': name }).position;
+  getId = name => find(this.props.state.employees.employeesList, { 'name': name }).id;
   handleChangeName = (event, index, name) => this.setState(
     {
       name,
-      position: this.getPosition(name)
+      position: this.getPosition(name),
+      idEmployee: this.getId(name),
+      idVacation: shortid.gen()
     }
   );
   resetForm = () => (
@@ -50,7 +56,9 @@ class VacationForm extends Component {
       position: 'инженер',
       vacationStartDate: null,
       vacationEndDate: null,
-      validationMessage: ''
+      validationMessage: '',
+      idEmployee: find(this.props.state.employees.employeesList, { 'name': 'Мотуз Глеб Игоревич' }).id,
+      idVacation: shortid.gen()
     })
   )
 
@@ -171,7 +179,9 @@ class VacationForm extends Component {
     } else {
       this.setState(
         {
-          position: this.getPosition(this.state.name),
+          idEmployee: this.getId(name),
+          idVacation: shortid.gen(),
+          position: this.getPosition(name),
           validationMessage: 'Список обновлён'
         }
       )
@@ -196,7 +206,7 @@ class VacationForm extends Component {
               >
                 {
                   employeesList.map(el => (
-                    <MenuItem key={el.name} value={el.name} primaryText={el.name} />
+                    <MenuItem key={el.id} value={el.name} primaryText={el.name} />
                   ))
                 }
               </SelectField>

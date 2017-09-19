@@ -3,7 +3,8 @@ import IconButton from 'material-ui/IconButton';
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import Done from 'material-ui/svg-icons/action/done';
 import Close from 'material-ui/svg-icons/navigation/close';
-import DatePicker from 'material-ui/DatePicker';
+import SortByAlpha from 'material-ui/svg-icons/av/sort-by-alpha';
+import Sort from 'material-ui/svg-icons/content/sort';
 import {
   Table,
   TableBody,
@@ -42,16 +43,17 @@ export default class TableVacations extends Component {
     deselectOnClickaway: true,
     showCheckboxes: false,
     height: '500px',
+    sortByName: false,
+    sortByDate: false
   };
 
   handleChangeStartDate = (event, date) => this.setState({ vacationStartDate: date });
   handleChangeEndDate = (event, date) => this.setState({ vacationEndDate: date });
 
   deleteVacation = event => {
-    const name = event.currentTarget.name;
-    const startDate = event.currentTarget.value;
+    const idVacation = event.currentTarget.dataset.idvacation;
 
-    this.props.deleteVacation(name, startDate);
+    this.props.deleteVacation(idVacation);
   }
 
   checkNextVacation = row => {
@@ -67,9 +69,27 @@ export default class TableVacations extends Component {
   editVacation = event => {
     const name = event.currentTarget.name;
     const startDate = event.currentTarget.value;
+    const idVacation = event.currentTarget.dataset.idvacation;
+    const idEmployee = event.currentTarget.dataset.idemployee;
     const edit = this.props.state.employees.editVacation;
 
-    edit ? this.props.closeEditVacation() : this.props.openEditVacation(name, startDate);
+    edit ? this.props.closeEditVacation() : this.props.openEditVacation(name, startDate, idEmployee, idVacation);
+  }
+
+  sortName = () => {
+    this.setState({
+      sortByName: !this.state.sortByName
+    });
+
+    this.props.sortByName(this.state.sortByName)
+  }
+
+  sortDate = () => {
+    this.setState({
+      sortByDate: !this.state.sortByDate
+    });
+
+    this.props.sortByDate(this.state.sortByDate)
   }
 
   render() {
@@ -94,6 +114,20 @@ export default class TableVacations extends Component {
               </TableHeaderColumn>
             </TableRow>
             <TableRow>
+              <TableHeaderColumn colSpan="2" >
+                Сортировка отпусков по ФИО работников
+                <IconButton onClick={this.sortName}>
+                  <SortByAlpha/>
+                </IconButton>
+              </TableHeaderColumn>
+              <TableHeaderColumn colSpan="3" >
+              Сортировка отпусков по дате начала отпуска
+                <IconButton onClick={this.sortDate}>
+                  <Sort/>
+                </IconButton>
+              </TableHeaderColumn>
+            </TableRow>
+            <TableRow>
               <TableHeaderColumn>ФИО</TableHeaderColumn>
               <TableHeaderColumn>Должность</TableHeaderColumn>
               <TableHeaderColumn>Начало отпуска</TableHeaderColumn>
@@ -110,7 +144,7 @@ export default class TableVacations extends Component {
             {
               vacations ? vacations.map( (row, index) => (
               <TableRow
-                key={index}
+                key={row.idVacation}
                 style={{ color: colorVacation(row) }}
               >
                 <TableRowColumn>{row.name}</TableRowColumn>
@@ -121,13 +155,16 @@ export default class TableVacations extends Component {
                   <IconButton
                     name={row.name}
                     value={row.vacationStartDate}
+                    data-idVacation={row.idVacation}
+                    data-idEmployee={row.idEmployee}
                     onClick={this.editVacation}
                     disabled={this.checkNextVacation(row)}
                   >
-                    {editVacation && middlewareVacation.name === row.name && middlewareVacation.vacationStartDate == row.vacationStartDate ? <Done/> : <ModeEdit/>}
+                    {editVacation && middlewareVacation.idVacation === row.idVacation ? <Done/> : <ModeEdit/>}
                   </IconButton>
                   <IconButton
                     name={row.name}
+                    data-idVacation={row.idVacation}
                     value={row.vacationStartDate}
                     onClick={this.deleteVacation}
                     disabled={this.checkNextVacation(row)}

@@ -34,6 +34,7 @@ export default class EditVacationForm extends Component {
     };
   }
 
+  getName = id => find(this.props.state.employees.employeesList, { 'id': id }).name;
   handleChangeStartDate = (event, date) => this.setState({ vacationStartDate: date });
   handleChangeEndDate = (event, date) => this.setState({ vacationEndDate: date });
   getPosition = name => find(this.props.state.employees.employeesList, { 'name': name }).position;
@@ -53,15 +54,15 @@ export default class EditVacationForm extends Component {
     const name = this.state.name;
     const position = this.state.position;
     const oldStartDate = this.props.state.employees.middlewareVacation.vacationStartDate;
+    const idEmployee = this.props.state.employees.middlewareVacation.idEmployee;
+    const idVacation = this.props.state.employees.middlewareVacation.idVacation;
     const copyList = Object.assign(this.props.state.employees.employeesList);
     const middle = copyList.map(el => {
       if (el.name === name) {
         remove(el.vacations, v => v.vacationStartDate == oldStartDate);
       }
       return el;
-    })
-    // const employeesList = this.props.state.employees.employeesList;
-    // const vacationsArray = find(employeesList, { 'name': name }).vacations;
+    });
     const employeesList = middle;
     const vacationsArray = find(employeesList, { 'name': name }).vacations;
 
@@ -183,7 +184,7 @@ export default class EditVacationForm extends Component {
           validationMessage: 'Список обновлён'
         }
       )
-      this.props.closeEditVacation(this.props.state.employees.middlewareVacation.name, startDate, endDate, oldStartDate);
+      this.props.closeEditVacation(this.props.state.employees.middlewareVacation.name, startDate, endDate, oldStartDate, idEmployee, idVacation);
       this.resetForm();
     };
   }
@@ -191,15 +192,14 @@ export default class EditVacationForm extends Component {
   render() {
     const { editVacation,
             middlewareVacation } = this.props.state.employees;
-    const name = middlewareVacation.name;
 
     return (
       <div className='add-vacation'>
         {
           !editVacation ? '' :
           <div>
-            <div>ФИО: {name}</div>
-            <div>Должность: {this.getPosition(name)}</div>
+            <div>ФИО: {this.getName(middlewareVacation.idEmployee)}</div>
+            <div>Должность: {this.getPosition(this.state.name)}</div>
             <DatePicker
                 hintText="Дата начала отпуска"
                 value={this.state.vacationStartDate}
