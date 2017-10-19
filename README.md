@@ -3,18 +3,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
-Комментарий для проверяющих от компании adform.
-
-Привет :)
-Из-за нехватки времени и проблем в семье выполнить задание нормально не получилось,
-не судите строго.
-Заранее прошу прощение за отнятое мной время. Спасибо и удачи :)
-
-Большая часть логики была реализована. Есть проблемы с отображением даты при перезагрузке страницы,
-с визуальным отличием отпусков при перезагрузке страницы. 
-В коде есть повторяющиеся куски.
-Не успел переписать логику изменения данных через использование id отпусков.
-
 Календарь отпусков ТЗ
 
 Приложение состоит из 2 частей:
